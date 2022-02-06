@@ -20,14 +20,23 @@ function getDegreesForHand(currentValue, maxValue, offset = 90) {
  * 
  * @param {Element} hand 
  * @param {number} degrees 
+ * @param {number} offset
  */
 function transformToDegrees(hand, degrees, offset = 90) {
+    if (degrees === offset) {
+        hand.classList.add('no-transition');
+        hand.offsetHeight; // trigger reflow
+    } else {
+        hand.classList.remove('no-transition');
+    }
     hand.style.transform = `rotate(${degrees}deg)`;
+    
 }
 
 function setDate() {
     const now = new Date();
     const secondsDegrees = getDegreesForHand(now.getSeconds(), 60);
+    console.log(`Seconds Degrees: ${secondsDegrees}`);
     transformToDegrees(secondHand, secondsDegrees);
 
     const minutesDegrees = getDegreesForHand(now.getMinutes(), 60);
@@ -36,7 +45,7 @@ function setDate() {
     const hoursDegrees = getDegreesForHand(now.getHours(), 12);
     transformToDegrees(hourHand, hoursDegrees);
 
-    console.log(`Seconds Degrees: ${secondsDegrees}`);
+    
     // console.log(`Hours: ${now.getHours()}, Degrees: ${hoursDegrees}`);
 }
 

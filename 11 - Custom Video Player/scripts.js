@@ -19,6 +19,25 @@ const skipButtons = player.querySelectorAll('[data-skip]');
 // Volume and speed sliders
 const ranges = player.querySelectorAll('.player__slider');
 
+// Fullscreen Button
+const fullscreenButton = player.querySelector('.fullscreen');
+
+// Timestamps
+const timeBox = player.querySelector('.time-box');
+
+function padLeft(string, pad, length) {
+  if (string.length >= length) {
+    return string;
+  }
+  return (new Array(length + 1).join(pad) + string).slice(-length);
+}
+
+function formatSeconds(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds - minutes * 60);
+  return `${padLeft(minutes, '0', 2)}:${padLeft(remainingSeconds, '0', 2)}`;
+}
+
 function togglePlay() {
   if (video.paused) {
     video.play();
@@ -48,6 +67,10 @@ function handleRangeUpdate() {
 function handleProgress() {
   const percent = (video.currentTime / video.duration) * 100;
   progressBar.style.flexBasis = `${percent}%`;
+
+  const current = formatSeconds(video.currentTime);
+  const max = formatSeconds(video.duration);
+  timeBox.value = `${current}/${max}`;
 }
 
 /**
@@ -57,6 +80,18 @@ function scrub(event) {
   const scrubTime =
     video.duration * (event.offsetX / event.currentTarget.offsetWidth);
   video.currentTime = scrubTime;
+}
+
+function handleFullscreen() {
+  // For simplicity, I'm excluding all the alternative cross-browser functions
+  if (!document.fullscreenElement) {
+    player.requestFullscreen().catch((err) => {
+      console.error('Unable to enter full screen', err);
+      alert('Sorry Fullscreen capabilities are not available at the moment.');
+    });
+  } else {
+    document.exitFullscreen();
+  }
 }
 
 video.addEventListener('click', togglePlay);
@@ -75,8 +110,11 @@ ranges.forEach((range) => {
   range.addEventListener('mousemove', handleRangeUpdate);
 });
 
+// Listening for events for the progress bar
 let mouseDown = false;
 progress.addEventListener('click', scrub);
 progress.addEventListener('mousemove', (event) => mouseDown && scrub(event));
 progress.addEventListener('mousedown', () => (mouseDown = true));
 progress.addEventListener('mouseup', () => (mouseDown = false));
+
+fullscreenButton.addEventListener('click', handleFullscreen);

@@ -1,0 +1,17 @@
+{
+  "name": "custom-video-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/script.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "browserslist": [
+    "last 1 chrome versions"
+  ],
+  "dependencies": {
+    "parcel": "^2.3.1"
+  }
+}

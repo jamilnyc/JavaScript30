@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background: url("oh-la-la.jpeg") center no-repeat;
+  background: darkgray;
   background-size: cover;
   min-height: 100vh;
   display: flex;
@@ -61,12 +61,12 @@ h2 {
   display: none;
 }
 
-.plates input + label:before {
+.plates input+label:before {
   content: "⬜️";
   margin-right: 10px;
 }
 
-.plates input:checked + label:before {
+.plates input:checked+label:before {
   content: "🌮";
 }
 

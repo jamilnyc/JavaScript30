@@ -5,6 +5,11 @@ const addItems = document.querySelector('.add-items');
 const itemsList = document.querySelector('.plates');
 const items = retrieve('items') || [];
 
+// Controls
+const checkAll = document.querySelector('.check-all');
+const uncheckAll = document.querySelector('.uncheck-all');
+const clear = document.querySelector('.clear');
+
 /**
  * @param {SubmitEvent} e
  */
@@ -39,7 +44,36 @@ function toggleDone(e) {
   populateList(items, itemsList);
 }
 
+/**
+ *
+ * @param {Element} listContainer
+ * @param {boolean} checked
+ */
+function setEntireList(listContainer, checked) {
+  listContainer.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+    box.checked = checked;
+    const { index } = box.dataset;
+    items[index].done = checked;
+    store('items', items);
+    populateList(items, listContainer);
+  });
+}
+
+/**
+ *
+ * @param {Element} listContainer
+ */
+function emptyList(listContainer) {
+  items.length = 0;
+  store('items', items);
+  populateList(items, listContainer);
+}
+
 addItems.addEventListener('submit', addItem);
 itemsList.addEventListener('click', toggleDone);
+
+checkAll.addEventListener('click', () => setEntireList(itemsList, true));
+uncheckAll.addEventListener('click', () => setEntireList(itemsList, false));
+clear.addEventListener('click', () => emptyList(itemsList));
 
 populateList(items, itemsList);
